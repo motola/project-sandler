@@ -3,8 +3,10 @@ from flask import Flask, request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import StoreSchema
-from db import stores
+from models import StoreModel
 
+from db import db
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 blp = Blueprint("stores", __name__, description="Operations on stores")
 
@@ -13,14 +15,15 @@ blp = Blueprint("stores", __name__, description="Operations on stores")
 class Store(MethodView):
     def get(self, store_id):
         try:
-            return stores[store_id]
+           store = StoreModel.query.get_or_404(store_id)
+           return store
         except KeyError:
             return abort( 404,message="store not found")
 
     def delete(self, store_id):
         try:
-            del stores[store_id]
-            return {"message":"store deleted."}
+           store = StoreModel.query.get_or_404(store_id)
+           raise NotImplementedError("Deleting a store is not implemented. ")
         except KeyError:
             return abort( 404,message="store not found")
         
@@ -42,9 +45,19 @@ class Store(MethodView):
           return {"stores": list(stores.values())}
         
     @blp.arguments(StoreSchema)
-    def post(self,data):
-       store_id = uuid.uuid4().hex
-       new_store = {**data, "id":store_id}
-       stores[store_id] = new_store
-       return new_store, 201
+    @blp.response(201, StoreSchema)
+    def post(self, store_data):
+        store = StoreModel(**store_data)
+        try:
+            db.session.add(store)
+            db.session.commit()
+        except IntegrityError:
+            abort(
+                400,
+                message="A store ith that nam already exist"
+            )
+
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while inserting the item")
     
+        return store
