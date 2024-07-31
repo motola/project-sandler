@@ -9,3 +9,4 @@ class StoreModel(db.Model):
     name = db.Column(db.String(80),unique=True, nullable=False)
     inventory = db.Column(db.String(80),unique=False, nullable=False)
     items = db.relationship("ItemModel", back_populates="store", lazy="dynamic")
+    tags = db.relationship("TagModel", back_populates="store", lazy="dynamic")

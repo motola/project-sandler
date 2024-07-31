@@ -1,4 +1,4 @@
-import uuid
+
 from flask import Flask, request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
@@ -23,7 +23,9 @@ class Store(MethodView):
     def delete(self, store_id):
         try:
            store = StoreModel.query.get_or_404(store_id)
-           raise NotImplementedError("Deleting a store is not implemented. ")
+           db.session.delete(store)
+           db.session.commit()
+           return {"message":"Store Deleted"}
         except KeyError:
             return abort( 404,message="store not found")
         
@@ -41,8 +43,9 @@ class Store(MethodView):
 # Get and Post Route for a store
 @blp.route("/store")
 class Store(MethodView):
+    @blp.response(200, StoreSchema(many=True))
     def get(self):
-          return {"stores": list(stores.values())}
+          return StoreModel.query.all()
         
     @blp.arguments(StoreSchema)
     @blp.response(201, StoreSchema)
