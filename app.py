@@ -1,8 +1,9 @@
 import os
-
+import secrets
 from flask import Flask
 from flask_smorest import Api
 
+from flask_jwt_extended import JWTManager
 from db import db
 # import models
 
@@ -10,6 +11,9 @@ from db import db
 from resources.item import blp as ItemBluePrint
 from resources.store import blp as StoreBluePrint
 from resources.tag import blp as TagBluePrint
+from resources.user import blp as UserBluePrint
+
+
 
 
 
@@ -33,6 +37,10 @@ def create_app(db_url=None):
 
 
     api = Api(app)
+
+    app.config["JWT_SECRET_KEY"] = "78620184077175484470304727811177835569"
+
+    jwt = JWTManager(app)
     # Homepage
 
     with app.app_context():
@@ -41,6 +49,7 @@ def create_app(db_url=None):
     api.register_blueprint(ItemBluePrint)
     api.register_blueprint(StoreBluePrint)
     api.register_blueprint(TagBluePrint)
+    api.register_blueprint(UserBluePrint)
 
 
     return app
