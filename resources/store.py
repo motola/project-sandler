@@ -1,6 +1,7 @@
 
 from flask import Flask, request
 from flask.views import MethodView
+from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from schemas import StoreSchema
 from models import StoreModel
@@ -43,6 +44,7 @@ class Store(MethodView):
 # Get and Post Route for a store
 @blp.route("/store")
 class Store(MethodView):
+    @jwt_required()
     @blp.response(200, StoreSchema(many=True))
     def get(self):
           return StoreModel.query.all()
