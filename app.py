@@ -100,8 +100,7 @@ def create_app(db_url=None):
 
     # Homepage
 
-    with app.app_context():
-       db.create_all()
+  
 
     api.register_blueprint(ItemBluePrint)
     api.register_blueprint(StoreBluePrint)
