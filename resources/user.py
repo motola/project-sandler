@@ -12,7 +12,7 @@ from sqlalchemy.exc import SQLAlchemyError
 blp = Blueprint("Users", "users", description="Operations on users")
 
 
-@blp.route("/register")
+@blp.route("/auth/register")
 class UserRegister(MethodView):
     @blp.arguments(UserSchema)
     @blp.response(201, UserSchema)
@@ -31,7 +31,7 @@ class UserRegister(MethodView):
         return user
     
 
-@blp.route("/login")
+@blp.route("/auth/login")
 class UserLogin(MethodView):
     @blp.arguments(UserSchema)
     def post(self, user_data):
