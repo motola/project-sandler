@@ -3,13 +3,10 @@
 This project is a backend service designed to manage a collection of stores, including their associated items and tags. It provides robust user authentication using JSON Web Tokens (JWT) and is built with Python and Flask. The service facilitates the organization and retrieval of store-related data, ensuring secure and efficient access for authenticated users.
 
 - [Description](#Description)
-- [Features](#Features)
 - [Installation](#Installation)
 - [Configuration](#Configuration)
 - [Usage](#Usage)
-- [Deployment](#deployment)
 - [API Endpoints](#APIEndpoints)
-- [Testing](#Testing)
 - [Deployment](#Deployment)
 - [Contributing](#Contributing)
 - [License](#License)
